@@ -1,0 +1,56 @@
+html {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: clip;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for iOS WebKit background attachment fixed bug */
+@media (max-width: 1024px) {
+  body {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Fix for AOS on Mobile devices (e.g. iPhone):
+   Prevents elements with [data-aos] from staying opacity: 0 (blank screen) on smartphones when AOS JS is disabled or slow */
+@media (max-width: 767px) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .mouseCursor {
+    display: none !important;
+  }
+}
+
+/* Specific iPhone Mobile (iOS Safari) performance optimization */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    .hn-bg-orb,
+    .cf-bg-orb,
+    .cf-bg-deco {
+      display: none !important;
+    }
+    
+    * {
+      -webkit-transform-style: flat !important;
+    }
+  }
+}
+
+
+
+
+
