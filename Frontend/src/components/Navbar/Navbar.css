@@ -570,16 +570,19 @@
   transition: all 0.22s ease;
 }
 
-.mega-sub-icon i {
+.mega-sub-icon i,
+.mega-sub-icon svg {
   color: var(--theme-color1, #ff6b1e);
   font-size: 16px;
+  transition: color 0.22s ease;
 }
 
 .mega-sub-card:hover .mega-sub-icon {
   background: var(--theme-color1, #ff6b1e);
 }
 
-.mega-sub-card:hover .mega-sub-icon i {
+.mega-sub-card:hover .mega-sub-icon i,
+.mega-sub-card:hover .mega-sub-icon svg {
   color: #fff;
 }
 

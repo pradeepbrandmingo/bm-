@@ -290,6 +290,7 @@
   border: 1.5px solid rgba(255, 107, 0, 0.3);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .wcu-ring-icon {

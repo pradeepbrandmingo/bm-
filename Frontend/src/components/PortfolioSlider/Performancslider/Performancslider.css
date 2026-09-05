@@ -426,6 +426,7 @@
   right: 14px;
   background: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   font-size: 11px;
@@ -602,6 +603,7 @@
   z-index: 100005;
   font-size: 16px;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .psl-lightbox-nav:hover {

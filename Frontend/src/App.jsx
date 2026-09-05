@@ -117,6 +117,7 @@ const PerformanceMarketing = lazy(
 const GoogleAds = lazy(() => import("./pages/AdsAndCampaigns/GoogleAds"));
 const FbInstAds = lazy(() => import("./pages/AdsAndCampaigns/FbInstAds"));
 const LinkedinAds = lazy(() => import("./pages/AdsAndCampaigns/LinkedinAds"));
+const OpenaiAds = lazy(() => import("./pages/AdsAndCampaigns/OpenaiAds"));
 const BrandAwareness = lazy(
   () => import("./pages/SocialMediaManagement/BrandAwareness"),
 );
@@ -208,21 +209,16 @@ function App() {
     if (!hasLoaded) {
       setShowLoader(true);
 
-      const handleLoad = () => {
+      // Fixed timeout — does NOT wait for window.load event.
+      // On iPhone, window.load can hang indefinitely if a 3rd-party resource
+      // (Google Fonts, reCAPTCHA, CDN script) stalls, keeping the preloader
+      // on screen forever. A hard 2.5s cap guarantees the UI always appears.
+      const timer = setTimeout(() => {
         setShowLoader(false);
         sessionStorage.setItem("hasLoaded", "true");
-      };
+      }, 2500);
 
-      if (document.readyState === "complete") {
-        handleLoad();
-      } else {
-        window.addEventListener("load", handleLoad);
-        const timer = setTimeout(handleLoad, 2000);
-        return () => {
-          window.removeEventListener("load", handleLoad);
-          clearTimeout(timer);
-        };
-      }
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -327,6 +323,7 @@ function AppContent({ showLoader, isPopupOpen, openPopup, closePopup, isCareersO
           <Route path="/" element={<NewHome openPopup={openPopup} />} />
 
           <Route path="/about" element={<About openPopup={openPopup} />} />
+          <Route path="/about-us" element={<About openPopup={openPopup} />} />
           <Route path="/portfolio" element={<PortfolioPage />} />
 
           <Route path="/blogs" element={<Blogs />} />
@@ -375,6 +372,7 @@ function AppContent({ showLoader, isPopupOpen, openPopup, closePopup, isCareersO
           <Route path="/google-ads" element={<GoogleAds />} />
           <Route path="/facebook-instagram-ads" element={<FbInstAds />} />
           <Route path="/linkedin-ads" element={<LinkedinAds />} />
+          <Route path="/openai-ads" element={<OpenaiAds />} />
 
           <Route path="/brand-awareness" element={<BrandAwareness />} />
           <Route path="/strategy-planning" element={<StrategyPlanning />} />

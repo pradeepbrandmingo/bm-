@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { SiOpenai } from "react-icons/si";
 import "./Navbar.css";
 
 /* ── Inline SVG icons ── */
@@ -167,6 +168,12 @@ const MEGA_SERVICES = [
         to: "/linkedin-ads",
         icon: "fa-brands fa-linkedin",
         desc: "B2B focused LinkedIn campaigns to reach decision makers.",
+      },
+      {
+        label: "OpenAI Ads",
+        to: "/openai-ads",
+        icon: <SiOpenai size={17} />,
+        desc: "AI-powered campaigns that drive relevant traffic and conversions.",
       },
     ],
   },
@@ -351,7 +358,12 @@ export default function Navbar({ openPopup }) {
   const toggleDropdown = (key) =>
     setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const isActive = (path) => (location.pathname === path ? "current" : "");
+  const isActive = (path) =>
+    location.pathname === path ||
+    (path === "/about-us" && location.pathname === "/about") ||
+    (path === "/about" && location.pathname === "/about-us")
+      ? "current"
+      : "";
 
   useEffect(() => {
     closeMobileMenu();
@@ -390,8 +402,8 @@ export default function Navbar({ openPopup }) {
                       <Link to="/">Home</Link>
                     </li>
 
-                    <li className={isActive("/about")}>
-                      <Link to="/about" onClick={closeMobileMenu}>
+                    <li className={isActive("/about-us")}>
+                      <Link to="/about-us" onClick={closeMobileMenu}>
                         About
                       </Link>
                     </li>
@@ -480,7 +492,11 @@ export default function Navbar({ openPopup }) {
                                     className="mega-sub-card"
                                   >
                                     <div className="mega-sub-icon">
-                                      <i className={item.icon} />
+                                      {typeof item.icon === "string" ? (
+                                        <i className={item.icon} />
+                                      ) : (
+                                        item.icon
+                                      )}
                                     </div>
                                     <div className="mega-sub-body">
                                       <span className="mega-sub-title">
@@ -604,8 +620,8 @@ export default function Navbar({ openPopup }) {
                   Home
                 </Link>
               </li>
-              <li className={isActive("/about")}>
-                <Link to="/about" onClick={closeMobileMenu}>
+              <li className={isActive("/about-us")}>
+                <Link to="/about-us" onClick={closeMobileMenu}>
                   About
                 </Link>
               </li>

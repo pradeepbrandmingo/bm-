@@ -102,7 +102,7 @@ const AboutAwardSection = () => {
                     <div className="right-text">
                       <div className="text">{item.tag}</div>
 
-                      <Link to="/about" className="arrow-icon">
+                      <Link to="/about-us" className="arrow-icon">
                         <img src={arrowIcon} alt="" />
                       </Link>
                     </div>

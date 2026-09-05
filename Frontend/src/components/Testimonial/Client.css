@@ -72,6 +72,7 @@
   text-transform: uppercase;
   margin-bottom: 24px;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .cl-badge-dot {
   width: 6px;
