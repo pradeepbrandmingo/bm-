@@ -5,7 +5,7 @@ import { openCareersPopup } from "../../utils/popup";
 
 const NewFooter = () => {
   const quickLinks = [
-    { name: "About Us", path: "/about" },
+    { name: "About Us", path: "/about-us" },
     { name: "Services", path: "/services" },
     { name: "Portfolio", path: "/portfolio" },
     { name: "Blog", path: "/blogs" },

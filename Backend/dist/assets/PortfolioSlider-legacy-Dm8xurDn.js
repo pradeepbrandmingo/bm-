@@ -1,1 +1,0 @@
-System.register(["./rolldown-runtime-legacy-B9frCREz.js","./animations-legacy-DogdpTEQ.js"],function(n,e){var t,i;return{setters:[function(n){n.a},function(n){t=n.d,i=n.l}],execute:function(){t(),i()}}});

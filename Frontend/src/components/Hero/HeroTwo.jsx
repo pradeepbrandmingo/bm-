@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import "./HeroTwo.css";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
 import BackgroundHome from "./BackgroundHome";
 
+// Lazy-load DotLottieReact so it never blocks first paint.
+// On iPhone, the lottie.host fetch was appearing twice in the Network tab
+// (double render) and the Framer infinite animation was stressing the GPU.
+const DotLottieReact = lazy(() =>
+  import("@lottiefiles/dotlottie-react").then((m) => ({ default: m.DotLottieReact }))
+);
+
 const MotionLink = motion(Link);
+
 
 /* ─────────────────────────────────────────
    CLIENT LOGOS
@@ -134,7 +141,9 @@ const CursorBadge = () => (
 ───────────────────────────────────────── */
 const DotGrid = () => (
   <div className="hn-dot-grid" aria-hidden="true">
-    {Array.from({ length: 80 }).map((_, i) => (
+    {/* Reduced from 80 to 30 nodes — 80 animated spans on iPhone caused
+        compositor overload, keeping the page in a permanent loading state */}
+    {Array.from({ length: 30 }).map((_, i) => (
       <span
         key={i}
         className="hn-dot"
@@ -320,11 +329,16 @@ const HeroTwo = ({ openPopup }) => {
                   ease: "easeInOut",
                 }}
               >
-                <DotLottieReact
-                  src="https://lottie.host/11c4931e-f8e2-4064-8263-64b3011a5a01/aZtSibBLe6.lottie"
-                  loop
-                  autoplay
-                />
+                {/* Lottie is lazy-loaded and skipped on mobile to prevent:
+                    1. The duplicate lottie.host network request visible in Safari Inspector
+                    2. Infinite Framer animation GPU pressure on iPhone first paint */}
+                <Suspense fallback={<div style={{ width: 120, height: 120 }} />}>
+                  <DotLottieReact
+                    src="https://lottie.host/11c4931e-f8e2-4064-8263-64b3011a5a01/aZtSibBLe6.lottie"
+                    loop
+                    autoplay
+                  />
+                </Suspense>
               </motion.div>
               <span className="hn-line3-text">
                 for Your <em className="hn-accent">Business</em>
@@ -381,7 +395,7 @@ const HeroTwo = ({ openPopup }) => {
             </MotionLink>
 
             <MotionLink
-              to="/about"
+              to="/about-us"
               className="hn-ghost-btn"
               whileHover={{ color: "#fff" }}
             >

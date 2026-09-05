@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+// Font Awesome is imported in App.jsx — removed duplicate here to prevent
+// double woff2 font download (fa-solid-900: 116KB, fa-brands-400: 110KB)
 import "swiper/css";
 
 // ── AOS ─────────────────────────────────────────────────────

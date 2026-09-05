@@ -1,13 +1,26 @@
 html {
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden; /* Safe fallback for iOS Safari 15 and older */
+}
+
+/* overflow-x: clip only activates on browsers that fully support it (iOS 16+, Chrome 90+) */
+@supports (overflow-x: clip) {
+  html {
+    overflow-x: clip;
+  }
 }
 
 body {
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden; /* Safe fallback for iOS Safari 15 and older */
   position: relative;
   -webkit-overflow-scrolling: touch;
+}
+
+@supports (overflow-x: clip) {
+  body {
+    overflow-x: clip;
+  }
 }
 
 #root {

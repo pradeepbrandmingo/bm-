@@ -122,6 +122,7 @@
   border-radius: 100px;
   background: rgba(var(--theme-color1-rgb, 255, 107, 30), 0.06);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Heading */

@@ -67,6 +67,7 @@
   text-transform: uppercase;
   width: fit-content;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .au-badge-dot {
@@ -258,6 +259,7 @@
   margin: 30px;
   border: 1px solid rgba(255, 107, 0, 0.2);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .au-badge-emoji {

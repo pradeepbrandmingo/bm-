@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SiOpenai } from "react-icons/si";
 const adsCampaignHero =
   "https://res.cloudinary.com/dqqgpii8v/image/upload/v1783149224/Untitled_design_wvzr0k.png";
 
@@ -23,6 +24,11 @@ const NAV = [
     fa: "fa-brands fa-linkedin",
     label: "Linkedin Ads",
     to: "/linkedin-ads",
+  },
+  {
+    fa: <SiOpenai size={15} />,
+    label: "OpenAI Ads",
+    to: "/openai-ads",
   },
 ];
 
@@ -147,7 +153,7 @@ const AdsAndCampaignsAbout = () => {
                     }}
                   >
                     <span className="nl">
-                      <i className={n.fa} />
+                      {typeof n.fa === "string" ? <i className={n.fa} /> : n.fa}
                       {n.label}
                     </span>
                     <i className="fa-solid fa-chevron-right chev" />
