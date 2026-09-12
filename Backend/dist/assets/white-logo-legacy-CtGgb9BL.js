@@ -1,1 +1,0 @@
-System.register([],function(e,t){return{setters:[],execute:function(){e("t","/assets/white-logo-Bc89Tz4W.png")}}});

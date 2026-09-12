@@ -333,11 +333,11 @@ const OpenaiAdsCtaBanner = () => {
             <div className="cta-badges-col">
               <div className="cta-premium-badge">
                 <div className="badge-icon-box">
-                  <i className="fas fa-rocket" />
+                  <i className="fas fa-arrow-trend-up" />
                 </div>
                 <div className="badge-info">
-                  <span className="val">200+</span>
-                  <span className="lbl">Campaigns Managed</span>
+                  <span className="val">4x</span>
+                  <span className="lbl">AVERAGE ROAS GROWTH</span>
                 </div>
               </div>
 
@@ -353,11 +353,11 @@ const OpenaiAdsCtaBanner = () => {
 
               <div className="cta-premium-badge">
                 <div className="badge-icon-box">
-                  <i className="fas fa-headset" />
+                  <i className="fas fa-bullseye" />
                 </div>
                 <div className="badge-info">
-                  <span className="val">24×7</span>
-                  <span className="lbl">CAMPAIGN MONITORING</span>
+                  <span className="val">100%</span>
+                  <span className="lbl">AI INTENT TARGETING</span>
                 </div>
               </div>
             </div>

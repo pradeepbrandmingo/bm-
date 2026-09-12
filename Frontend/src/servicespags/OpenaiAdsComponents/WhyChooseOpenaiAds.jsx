@@ -48,11 +48,11 @@ const WhyChooseOpenaiAds = () => {
           {/* 3 */}
           <div className="wcb-card">
             <div className="wcb-stat-value">
-              200<span>+</span>
+              4<span>x</span>
             </div>
-            <div className="wcb-stat-label">Campaigns Managed</div>
+            <div className="wcb-stat-label">Average ROAS Growth</div>
             <p className="wcb-stat-desc">
-              Managing performance campaigns focused on reach, engagement, and
+              Managing performance AI campaigns focused on high intent, engagement, and
               conversions
             </p>
           </div>

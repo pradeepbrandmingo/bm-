@@ -7,12 +7,17 @@
 
 .admin-main {
   flex: 1;
-  margin-left: 260px;
+  margin-left: var(--admin-sidebar-w, 250px);
   min-height: 100vh;
-
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
-
   background: #0b0b0f;
+  transition: margin-left 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    margin-left: 0 !important;
+  }
 }

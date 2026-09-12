@@ -1,1 +1,0 @@
-import{E as e}from"./vendor-BZzjsFNg.js";export{e as DotLottieReact};

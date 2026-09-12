@@ -7,6 +7,7 @@ import {
   updateBlog,
   deleteBlog,
   getPublicBlogs,
+  uploadBlogContentImage,
 } from "../controllers/blogController.js";
 import protectAdmin from "../middleware/authMiddleware.js";
 import upload from "../middleware/upload.js";
@@ -18,6 +19,12 @@ router.get("/public", getPublicBlogs);
 router.get("/slug/:slug", getBlogBySlug);
 
 // ADMIN ROUTES (protected)
+router.post(
+  "/upload-image",
+  protectAdmin,
+  upload.single("image"),
+  uploadBlogContentImage,
+);
 router.post("/", protectAdmin, upload.single("featuredImage"), createBlog);
 router.get("/", protectAdmin, getAllBlogs);
 router.get("/:id", protectAdmin, getBlogById);

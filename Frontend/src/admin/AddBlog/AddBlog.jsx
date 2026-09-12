@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./AddBlog.css";
 import { createBlog } from "../services/blogService";
+import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
 /* ── SVG Icons ── */
 const IconGlobe = () => (
@@ -113,8 +114,8 @@ const IconPlus = () => (
 );
 const IconArrow = () => (
   <svg
-    width="16"
-    height="16"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -124,6 +125,57 @@ const IconArrow = () => (
   >
     <line x1="5" y1="12" x2="19" y2="12" />
     <polyline points="12,5 19,12 12,19" />
+  </svg>
+);
+
+/* Cloud-save icon for Save Draft */
+const IconSave = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </svg>
+);
+
+/* Left chevron for Back button */
+const IconChevronLeft = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+
+/* Globe/publish icon */
+const IconSend = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="22" y1="2" x2="11" y2="13" />
+    <polygon points="22 2 15 22 11 13 2 9 22 2" />
   </svg>
 );
 
@@ -178,11 +230,13 @@ const AddBlog = () => {
 
   /* ── Tags state ── */
   const [tagInput, setTagInput] = useState("");
+  const tagInputRef = useRef(null);
 
   /* ── Custom category state ── */
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [showCustomCat, setShowCustomCat] = useState(false);
   const [customCatInput, setCustomCatInput] = useState("");
+  const [catDropdownOpen, setCatDropdownOpen] = useState(false);
 
   /* ── UI state ── */
   const [loading, setLoading] = useState(false);
@@ -365,8 +419,19 @@ const AddBlog = () => {
       await createBlog(fd);
       navigate("/admin/blogs");
     } catch (err) {
-      console.error(err);
-      setErrors({ submit: "Failed to save blog. Please try again." });
+      console.error("Save blog error:", err);
+      const serverMsg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Failed to save blog. Please try again.";
+
+      if (serverMsg.toLowerCase().includes("slug")) {
+        setErrors({ slug: serverMsg, submit: serverMsg });
+      } else {
+        setErrors({ submit: serverMsg });
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setLoading(false);
     }
@@ -388,14 +453,6 @@ const AddBlog = () => {
           <Link to="/admin/blogs" className="ab-btn-cancel">
             Cancel
           </Link>
-          <button
-            className="ab-btn-publish"
-            onClick={() => handleSubmit("published")}
-            disabled={loading}
-          >
-            {loading ? "Publishing..." : "Publish Post"}
-            {!loading && <IconArrow />}
-          </button>
         </div>
       </div>
 
@@ -454,25 +511,21 @@ const AddBlog = () => {
           </div>
 
           {/* Content */}
-          <div className="ab-card">
-            <div className="ab-field">
-              <label className="ab-label" htmlFor="ab-content">
-                Content <span className="ab-req">*</span>
-              </label>
-              <textarea
-                id="ab-content"
-                name="content"
-                className={`ab-textarea${errors.content ? " ab-input--error" : ""}`}
-                placeholder="Start writing your article..."
-                value={form.content}
-                onChange={handleChange}
-                rows={16}
-              />
-              {errors.content && (
-                <span className="ab-field-error">{errors.content}</span>
-              )}
-              <p className="ab-field-hint">{form.content.length} characters</p>
-            </div>
+          <div className="ab-card ab-card--editor">
+            <RichTextEditor
+              label="Article Content"
+              value={form.content}
+              onChange={(html) => {
+                setForm((p) => ({ ...p, content: html }));
+                if (errors.content) setErrors((p) => ({ ...p, content: "" }));
+              }}
+              error={errors.content}
+            />
+            {errors.content && (
+              <span className="ab-field-error" style={{ marginTop: 8, display: "block" }}>
+                {errors.content}
+              </span>
+            )}
           </div>
 
           {/* SEO Settings */}
@@ -524,28 +577,36 @@ const AddBlog = () => {
           <div className="ab-card">
             <div className="ab-card-head">
               <IconGlobe />
-              <h3 className="ab-card-title">Publish</h3>
+              <h3 className="ab-card-title">Publish Settings</h3>
             </div>
 
+            {/* Custom Status Dropdown — no native OS blue */}
             <div className="ab-field">
-              <label className="ab-label" htmlFor="ab-status">
-                Status
-              </label>
-              <select
-                id="ab-status"
-                name="status"
-                className="ab-select"
-                value={form.status}
-                onChange={handleChange}
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+              <label className="ab-label">Status</label>
+              <div className="ab-status-group">
+                <button
+                  type="button"
+                  className={`ab-status-pill ${form.status === 'draft' ? 'ab-status-pill--active-draft' : ''}`}
+                  onClick={() => setForm(p => ({ ...p, status: 'draft' }))}
+                >
+                  <span className="ab-status-dot ab-status-dot--draft" />
+                  Draft
+                </button>
+                <button
+                  type="button"
+                  className={`ab-status-pill ${form.status === 'published' ? 'ab-status-pill--active-pub' : ''}`}
+                  onClick={() => setForm(p => ({ ...p, status: 'published' }))}
+                >
+                  <span className="ab-status-dot ab-status-dot--pub" />
+                  Published
+                </button>
+              </div>
             </div>
 
             <div className="ab-field">
               <label className="ab-label" htmlFor="ab-publishDate">
                 Publish Date
+                <span className="ab-field-hint" style={{margin:0}}>Optional</span>
               </label>
               <input
                 id="ab-publishDate"
@@ -556,14 +617,6 @@ const AddBlog = () => {
                 onChange={handleChange}
               />
             </div>
-
-            <button
-              className="ab-btn-draft"
-              onClick={() => handleSubmit("draft")}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save as Draft"}
-            </button>
           </div>
 
           {/* Organization */}
@@ -573,24 +626,50 @@ const AddBlog = () => {
               <h3 className="ab-card-title">Organization</h3>
             </div>
 
-            {/* Category */}
+            {/* Category — Custom Dropdown */}
             <div className="ab-field">
-              <label className="ab-label" htmlFor="ab-category">
-                Category
-              </label>
-              <select
-                id="ab-category"
-                name="category"
-                className={`ab-select${errors.category ? " ab-input--error" : ""}`}
-                value={form.category}
-                onChange={handleChange}
+              <label className="ab-label">Category</label>
+
+              {/* Custom dropdown trigger */}
+              <div
+                className={`ab-custom-select${errors.category ? ' ab-input--error' : ''}${catDropdownOpen ? ' ab-custom-select--open' : ''}`}
+                onClick={() => setCatDropdownOpen(o => !o)}
+                tabIndex={0}
+                onBlur={() => setTimeout(() => setCatDropdownOpen(false), 150)}
               >
-                {categories.map((cat, i) => (
-                  <option key={i} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+                <span className="ab-custom-select-value">{form.category || 'Select category...'}</span>
+                <span className="ab-custom-select-arrow">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </span>
+
+                {/* Dropdown list */}
+                {catDropdownOpen && (
+                  <div className="ab-custom-select-menu">
+                    {categories.map((cat, i) => (
+                      <div
+                        key={i}
+                        className={`ab-custom-select-option${form.category === cat ? ' ab-custom-select-option--active' : ''}`}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setForm(p => ({ ...p, category: cat }));
+                          setErrors(p => ({ ...p, category: '' }));
+                          setCatDropdownOpen(false);
+                        }}
+                      >
+                        {form.category === cat && (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                        {cat}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {errors.category && (
                 <span className="ab-field-error">{errors.category}</span>
               )}
@@ -612,27 +691,12 @@ const AddBlog = () => {
                     placeholder="New category name..."
                     value={customCatInput}
                     onChange={(e) => setCustomCatInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && addCustomCategory()}
+                    onKeyDown={(e) => e.key === 'Enter' && addCustomCategory()}
                     autoFocus
                   />
                   <div className="ab-custom-cat-actions">
-                    <button
-                      className="ab-btn-cat-add"
-                      onClick={addCustomCategory}
-                      type="button"
-                    >
-                      Add
-                    </button>
-                    <button
-                      className="ab-btn-cat-cancel"
-                      onClick={() => {
-                        setShowCustomCat(false);
-                        setCustomCatInput("");
-                      }}
-                      type="button"
-                    >
-                      Cancel
-                    </button>
+                    <button className="ab-btn-cat-add" onClick={addCustomCategory} type="button">Add</button>
+                    <button className="ab-btn-cat-cancel" onClick={() => { setShowCustomCat(false); setCustomCatInput(''); }} type="button">Cancel</button>
                   </div>
                 </div>
               )}
@@ -642,15 +706,23 @@ const AddBlog = () => {
             <div className="ab-field">
               <label className="ab-label">
                 Tags
-                <span className="ab-char-count">{form.tags.length}/10</span>
+                <span className="ab-tags-counter">
+                  <span className={form.tags.length >= 10 ? 'ab-tags-counter--full' : ''}>
+                    {form.tags.length}
+                  </span>
+                  /10
+                </span>
               </label>
-              <div className="ab-tags-wrap">
+              <div
+                className="ab-tags-wrap"
+                onClick={() => tagInputRef.current?.focus()}
+              >
                 {form.tags.map((tag, i) => (
                   <span className="ab-tag" key={i}>
                     {tag}
                     <button
                       className="ab-tag-remove"
-                      onClick={() => removeTag(tag)}
+                      onClick={(e) => { e.stopPropagation(); removeTag(tag); }}
                       type="button"
                       aria-label={`Remove tag ${tag}`}
                     >
@@ -658,20 +730,24 @@ const AddBlog = () => {
                     </button>
                   </span>
                 ))}
-                <input
-                  className="ab-tags-input"
-                  placeholder={
-                    form.tags.length < 10
-                      ? "Add tag, press Enter..."
-                      : "Max tags reached"
-                  }
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                  disabled={form.tags.length >= 10}
-                />
+                {form.tags.length < 10 ? (
+                  <input
+                    ref={tagInputRef}
+                    className="ab-tags-input"
+                    placeholder={form.tags.length === 0 ? 'Type a tag & press Enter...' : 'Add another tag...'}
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                  />
+                ) : (
+                  <span className="ab-tags-max-msg">Max tags reached</span>
+                )}
               </div>
-              <p className="ab-field-hint">Press Enter or comma to add tags.</p>
+              <p className="ab-field-hint">
+                {form.tags.length < 10
+                  ? `Press Enter or comma to add. ${10 - form.tags.length} slot${10 - form.tags.length !== 1 ? 's' : ''} remaining.`
+                  : '✓ All 10 tag slots filled.'}
+              </p>
             </div>
           </div>
 
@@ -740,24 +816,38 @@ const AddBlog = () => {
 
       {/* ── Bottom action bar ── */}
       <div className="ab-bottom-bar">
-        <Link to="/admin/blogs" className="ab-btn-cancel">
-          Cancel
+        {/* Left: back link */}
+        <Link to="/admin/blogs" className="ab-btn-back">
+          <IconChevronLeft />
+          <span>Blogs</span>
         </Link>
-        <div style={{ display: "flex", gap: "10px" }}>
+
+        {/* Right: save draft + publish */}
+        <div className="ab-bottom-actions">
           <button
-            className="ab-btn-draft"
+            className="ab-btn-draft-bottom"
             onClick={() => handleSubmit("draft")}
             disabled={loading}
+            title="Save as draft — not visible to public"
           >
-            {loading ? "Saving..." : "Save as Draft"}
+            {loading ? (
+              <><span className="ab-saving-dot" />Saving...</>
+            ) : (
+              <><IconSave />Save Draft</>
+            )}
           </button>
+
           <button
             className="ab-btn-publish"
             onClick={() => handleSubmit("published")}
             disabled={loading}
+            title="Publish — make visible to public"
           >
-            {loading ? "Publishing..." : "Save & Publish"}
-            {!loading && <IconArrow />}
+            {loading ? (
+              <><span className="ab-saving-dot ab-saving-dot--white" />Publishing...</>
+            ) : (
+              <><IconSend />Publish Post</>
+            )}
           </button>
         </div>
       </div>

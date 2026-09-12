@@ -146,7 +146,7 @@ const SearchIcon = () => (
 );
 
 /* ── Lottie CTA ── */
-const CtaLottie = () => {
+const CtaLottie = React.memo(() => {
   useEffect(() => {
     if (!document.querySelector("script[data-lottie-wc]")) {
       const s = document.createElement("script");
@@ -165,7 +165,8 @@ const CtaLottie = () => {
       style={{ width: "72px", height: "72px" }}
     />
   );
-};
+});
+CtaLottie.displayName = "CtaLottie";
 
 /* ── Read time calculator ── */
 const calcReadTime = (content = "") => {
@@ -199,7 +200,7 @@ const shareOn = (platform, url, title) => {
 /* ══════════════════════════════════════════
    SKELETON LOADER
 ══════════════════════════════════════════ */
-const DetailSkeleton = () => (
+const DetailSkeleton = React.memo(() => (
   <div className="bd-skeleton-wrapper">
     <div className="bd-skeleton-body">
       <div className="bd-skel bd-skel--title" />
@@ -215,12 +216,13 @@ const DetailSkeleton = () => (
       <div className="bd-skel bd-skel--med" />
     </div>
   </div>
-);
+));
+DetailSkeleton.displayName = "DetailSkeleton";
 
 /* ══════════════════════════════════════════
    RELATED CARD
 ══════════════════════════════════════════ */
-const RelatedCard = ({ blog }) => {
+const RelatedCard = React.memo(({ blog }) => {
   const day = new Date(blog.createdAt).getDate();
   const month = new Date(blog.createdAt)
     .toLocaleString("en-US", { month: "short" })
@@ -257,12 +259,13 @@ const RelatedCard = ({ blog }) => {
       <div className="bd-related-accent" />
     </Link>
   );
-};
+});
+RelatedCard.displayName = "RelatedCard";
 
 /* ══════════════════════════════════════════
    SIDEBAR
 ══════════════════════════════════════════ */
-const Sidebar = ({ allBlogs, currentSlug, tags, categories }) => {
+const Sidebar = React.memo(({ allBlogs, currentSlug, tags, categories }) => {
   const [searchVal, setSearchVal] = useState("");
   const navigate = useNavigate();
 
@@ -414,7 +417,8 @@ const Sidebar = ({ allBlogs, currentSlug, tags, categories }) => {
       </div>
     </aside>
   );
-};
+});
+Sidebar.displayName = "Sidebar";
 
 /* ══════════════════════════════════════════
    MAIN COMPONENT
@@ -424,6 +428,7 @@ const BlogDetails = () => {
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const contentRef = useRef(null);
+  const progressBarRef = useRef(null);
 
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
@@ -431,7 +436,6 @@ const BlogDetails = () => {
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [readProgress, setReadProgress] = useState(0);
 
   /* ── Fetch blog ── */
   useEffect(() => {
@@ -460,24 +464,44 @@ const BlogDetails = () => {
     fetchData();
   }, [slug]);
 
-  /* ── Read progress ── */
+  /* ── Ultra-smooth Read Progress (No React state re-renders on scroll!) ── */
   useEffect(() => {
     if (!blog) return;
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateProgress = () => {
       const el = contentRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const total = el.offsetHeight;
-      const scrolled = Math.max(0, -rect.top);
-      const progress = Math.min(100, (scrolled / total) * 100);
-      setReadProgress(progress);
+      const bar = progressBarRef.current;
+      if (el && bar) {
+        const rect = el.getBoundingClientRect();
+        const total = el.offsetHeight;
+        const scrolled = Math.max(0, -rect.top);
+        const progress = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
+        bar.style.width = `${progress}%`;
+      }
+      ticking = false;
     };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, [blog]);
 
   /* ── Derived ── */
-  const readTime = useMemo(() => calcReadTime(blog?.content), [blog]);
+  const readTime = useMemo(() => calcReadTime(blog?.content), [blog?.content]);
 
   const categories = useMemo(() => {
     const map = {};
@@ -499,10 +523,28 @@ const BlogDetails = () => {
   }, [allBlogs]);
 
   const relatedBlogs = useMemo(() => {
-    if (!blog) return [];
-    return allBlogs
-      .filter((b) => b.slug !== blog.slug && b.category === blog.category)
-      .slice(0, 3);
+    if (!blog || !Array.isArray(allBlogs) || allBlogs.length === 0) return [];
+
+    const currentCat = (blog.category || "").trim().toLowerCase();
+    // 1. First priority: Blogs in the same category (case-insensitive)
+    const sameCategory = allBlogs.filter(
+      (b) =>
+        b.slug !== blog.slug &&
+        (b.category || "").trim().toLowerCase() === currentCat
+    );
+
+    if (sameCategory.length >= 3) {
+      return sameCategory.slice(0, 3);
+    }
+
+    // 2. Fallback: Fill remaining slots with other recent published blogs so Related Cards with Images ALWAYS show!
+    const otherBlogs = allBlogs.filter(
+      (b) =>
+        b.slug !== blog.slug &&
+        !sameCategory.some((sc) => sc._id === b._id)
+    );
+
+    return [...sameCategory, ...otherBlogs].slice(0, 3);
   }, [blog, allBlogs]);
 
   /* ── Copy URL ── */
@@ -513,18 +555,19 @@ const BlogDetails = () => {
     });
   };
 
-  /* ── Render content safely ── */
-  const renderContent = (content = "") => {
+  /* ── Memoized content renderer ── */
+  const renderedContent = useMemo(() => {
+    const content = blog?.content || "";
     // If plain text (no HTML tags), wrap in paragraphs
     if (!/<[a-z][\s\S]*>/i.test(content)) {
       return content
         .split(/\n\n+/)
         .filter(Boolean)
-        .map((para, i) => `<p key="${i}">${para.replace(/\n/g, "<br/>")}</p>`)
+        .map((para) => `<p>${para.replace(/\n/g, "<br/>")}</p>`)
         .join("");
     }
     return content;
-  };
+  }, [blog?.content]);
 
   /* ── Loading ── */
   if (loading) {
@@ -576,8 +619,8 @@ const BlogDetails = () => {
 
   return (
     <div className={`bd-page${visible ? " bd-page--visible" : ""}`}>
-      {/* ── Read Progress Bar ── */}
-      <div className="bd-progress-bar" style={{ width: `${readProgress}%` }} />
+      {/* ── Read Progress Bar (RAF-driven ref for 60/120 FPS scrolling) ── */}
+      <div ref={progressBarRef} className="bd-progress-bar" style={{ width: "0%" }} />
 
       {/* ── Breadcrumb ── */}
       <div className="bd-breadcrumb-wrap">
@@ -654,7 +697,7 @@ const BlogDetails = () => {
             {/* ── Article Content ── */}
             <div
               className="bd-content"
-              dangerouslySetInnerHTML={{ __html: renderContent(blog.content) }}
+              dangerouslySetInnerHTML={{ __html: renderedContent }}
             />
 
             {/* ── Tags + Share ── */}

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Swiper from "swiper";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import d1 from "../../assets/images/resource/service-d1.jpg";
-import d2 from "../../assets/images/resource/service-d2.jpg";
 import RelatedServices from "../../components/RelatedServices/RelatedServices";
 import { openEnquiryPopup } from "../../utils/popup";
 
@@ -123,13 +121,6 @@ const OpenaiAds = () => {
                               <span className="react-stat-num">90%</span>
                               <span className="react-stat-label">
                                 Intent-Focused Campaigns
-                              </span>
-                            </div>
-                            <div className="react-stat-divider" />
-                            <div className="react-stat-item">
-                              <span className="react-stat-num">200+</span>
-                              <span className="react-stat-label">
-                                Campaigns Managed
                               </span>
                             </div>
                           </div>
@@ -515,11 +506,11 @@ const OpenaiAds = () => {
                     <div className="swiper-wrapper">
                       {[
                         {
-                          img: d1,
+                          img: "https://res.cloudinary.com/dqqgpii8v/image/upload/v1788612906/openaiadspageimg_1_bkosnz.png",
                           cap: "",
                         },
                         {
-                          img: d2,
+                          img: "https://res.cloudinary.com/dqqgpii8v/image/upload/v1788612905/openaiadspageimg_2_poffi0.png",
                           cap: "",
                         },
                       ].map((s, i) => (
@@ -527,18 +518,20 @@ const OpenaiAds = () => {
                           <div
                             style={{
                               width: "100%",
-                              height: "220px",
+                              aspectRatio: "1640 / 1080",
+                              height: "auto",
                               overflow: "hidden",
-                              borderRadius: "6px",
+                              borderRadius: "8px",
                             }}
                           >
                             <img
                               src={s.img}
-                              alt=""
+                              alt="OpenAI Ads Campaign"
                               style={{
                                 width: "100%",
                                 height: "100%",
                                 objectFit: "cover",
+                                objectPosition: "center",
                                 display: "block",
                               }}
                             />

@@ -272,7 +272,7 @@ function AppContent({ showLoader, isPopupOpen, openPopup, closePopup, isCareersO
       {!isAdminRoute && <Navbar openPopup={openPopup} />}
 
       <Suspense fallback={<></>}>
-        <Cursor />
+        {!isAdminRoute && <Cursor />}
 
         <Routes>
           {/* ADMIN */}

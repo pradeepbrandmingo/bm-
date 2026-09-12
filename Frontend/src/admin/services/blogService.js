@@ -65,3 +65,15 @@ export const getBlogBySlug = async (slug) => {
   const res = await API.get(`/blogs/slug/${slug}`);
   return res.data;
 };
+
+// ==============================
+// UPLOAD CONTENT IMAGE (RICH TEXT EDITOR)
+// ==============================
+export const uploadBlogContentImage = async (formData) => {
+  const res = await API.post("/blogs/upload-image", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

@@ -139,6 +139,14 @@ const Sidebar = ({ onLogout }) => {
   const location = useLocation();
   const sidebarRef = useRef(null);
 
+  const [adminInfo] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("adminInfo")) || {};
+    } catch {
+      return {};
+    }
+  });
+
   /* ── Breakpoint detection ── */
   useEffect(() => {
     const onResize = () => {
@@ -149,6 +157,12 @@ const Sidebar = ({ onLogout }) => {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  /* ── Sync sidebar width with layout ── */
+  useEffect(() => {
+    const width = isMobile ? "0px" : collapsed ? "70px" : "250px";
+    document.documentElement.style.setProperty("--admin-sidebar-w", width);
+  }, [collapsed, isMobile]);
 
   /* ── Close drawer on navigation ── */
   useEffect(() => {
@@ -255,16 +269,20 @@ const Sidebar = ({ onLogout }) => {
         )}
 
         {/* ── Logo ── */}
-        <Link className="mc-sidebar__logo" to="/admin/dashboard">
-          <div className="mc-sidebar__logo-icon" aria-hidden="true">
-            B
+        <Link className="mc-sidebar__logo" to="/admin/dashboard" title="Brandmingo Admin">
+          <div className="mc-sidebar__logo-brand">
+            <img
+              src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1774440484/Group-19-2-1024x199_pnnsp8.png"
+              alt="Brandmingo"
+              className="mc-sidebar__logo-full"
+            />
+            <img
+              src="/brandmingo-fab-iocn.png"
+              alt="Brandmingo"
+              className="mc-sidebar__logo-collapsed"
+            />
           </div>
-          <div className="mc-sidebar__logo-text">
-            <span className="mc-sidebar__logo-name">
-              Brand<em>mingo</em>
-            </span>
-            <span className="mc-sidebar__logo-sub">Admin Panel</span>
-          </div>
+          <span className="mc-sidebar__admin-tag">Admin</span>
         </Link>
 
         {/* ── Nav ── */}
@@ -305,7 +323,25 @@ const Sidebar = ({ onLogout }) => {
 
         {/* ── Footer ── */}
         <footer className="mc-sidebar__footer">
+          {/* Admin User Chip */}
+          <div className="mc-sidebar__user">
+            <div className="mc-sidebar__user-avatar">
+              {(adminInfo?.name || adminInfo?.email || "A").charAt(0).toUpperCase()}
+            </div>
+            <div className="mc-sidebar__user-meta">
+              <span className="mc-sidebar__user-name">
+                {adminInfo?.name || "Admin"}
+              </span>
+              <span className="mc-sidebar__user-role">
+                <span className="mc-sidebar__status-dot" />
+                Administrator
+              </span>
+            </div>
+          </div>
+
           <div className="mc-sidebar__divider" aria-hidden="true" />
+
+          {/* Logout */}
           <button
             className="mc-sidebar__logout"
             onClick={handleLogout}

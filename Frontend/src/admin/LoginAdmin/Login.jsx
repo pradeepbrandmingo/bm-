@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 /* ── SVG Icons ── */
 const EyeIcon = ({ show }) =>
@@ -82,7 +82,18 @@ export default function Login() {
     if (token) {
       navigate("/admin/dashboard");
     }
-  }, []);
+
+    // Lock page scrolling completely while on login screen
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [navigate]);
 
   // ── API CONNECT ──
   const handleSubmit = async (e) => {
@@ -140,30 +151,19 @@ export default function Login() {
       <div className="lg-orb lg-orb-2" aria-hidden="true" />
 
       <div className="lg-wrapper">
-        {/* ── Logo ── */}
-        <div className="lg-logo">
-          <div className="lg-logo-icon" aria-hidden="true">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-          </div>
-          <div className="lg-logo-name">
-            Brand<span>mingo</span>
-          </div>
+        {/* ── Brand Logo ── */}
+        <div className="lg-logo-wrapper">
+          <Link to="/" className="lg-logo-link" title="Brandmingo Home">
+            <img
+              src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1774440484/Group-19-2-1024x199_pnnsp8.png"
+              alt="Brandmingo"
+              className="lg-brand-logo"
+            />
+          </Link>
         </div>
 
         {/* ── Card ── */}
         <div className="lg-card">
-          <div className="lg-card-topline" aria-hidden="true" />
           <div className="lg-card-glow" aria-hidden="true" />
 
           {/* Header */}
@@ -288,10 +288,47 @@ export default function Login() {
           </form>
 
           {/* Footer */}
-          <p className="lg-footer">
-            © 2026 Brandmingo · Authorized personnel only
-          </p>
+          <div className="lg-footer">
+            <div className="lg-security-note">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>256-Bit SSL Encrypted Access</span>
+            </div>
+            <p className="lg-copyright">
+              © 2026 Brandmingo · Authorized personnel only
+            </p>
+          </div>
         </div>
+
+        {/* Back to site */}
+        <Link to="/" className="lg-back-link">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          Back to Website
+        </Link>
       </div>
     </div>
   );

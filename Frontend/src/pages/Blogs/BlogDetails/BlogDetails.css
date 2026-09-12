@@ -25,9 +25,10 @@
   height: 3px;
   background: linear-gradient(90deg, var(--theme-color1, #ff6b1e), #ffb347);
   z-index: 9999;
-  transition: width 0.1s ease;
   border-radius: 0 3px 3px 0;
   box-shadow: 0 0 10px rgba(255, 107, 30, 0.6);
+  pointer-events: none;
+  will-change: width;
 }
 
 /* ── Container ── */
@@ -239,7 +240,7 @@
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: transform 0.8s ease;
+  transition: transform 0.6s ease;
 }
 
 .bd-hero:hover .bd-hero-img {
@@ -258,16 +259,24 @@
 }
 
 /* ══════════════════════════════════════════
-   ARTICLE CONTENT
+   ARTICLE CONTENT (RichText & Standard HTML)
 ══════════════════════════════════════════ */
 .bd-content {
   font-family: var(--body-font-family, inherit);
   font-size: 16px;
   line-height: 1.85;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.75);
   margin-bottom: 40px;
   word-break: break-word;
   overflow-wrap: break-word;
+  position: relative;
+}
+
+/* Clearfix for floated embedded images */
+.bd-content::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .bd-content p {
@@ -324,21 +333,37 @@
   font-style: italic;
 }
 
-.bd-content a {
+.bd-content u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bd-content s {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+/* ── Links ── */
+.bd-content a,
+.bd-content .rte-link {
   color: var(--theme-color1, #ff6b1e);
   text-decoration: underline;
   text-underline-offset: 3px;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease, color 0.25s ease;
+  word-break: break-word;
 }
 
-.bd-content a:hover {
-  opacity: 0.75;
+.bd-content a:hover,
+.bd-content .rte-link:hover {
+  opacity: 0.8;
+  color: #ff8533;
 }
 
+/* ── Lists ── */
 .bd-content ul,
 .bd-content ol {
-  padding-left: 1.5em;
-  margin: 0 0 1.4em;
+  padding-left: 1.6em;
+  margin: 0 0 1.5em;
 }
 
 .bd-content li {
@@ -354,6 +379,7 @@
   font-weight: 700;
 }
 
+/* ── Blockquotes ── */
 .bd-content blockquote {
   margin: 2em 0;
   padding: 20px 24px;
@@ -362,83 +388,205 @@
   border-radius: 0 12px 12px 0;
   font-size: 16px;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .bd-content blockquote p {
   margin: 0;
 }
 
+/* ── Pre & Code ── */
 .bd-content pre {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 12px;
   padding: 20px 24px;
   overflow-x: auto;
   font-size: 14px;
   line-height: 1.6;
-  margin: 1.5em 0;
+  margin: 1.8em 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .bd-content code {
   background: rgba(255, 107, 30, 0.1);
-  border: 1px solid rgba(255, 107, 30, 0.18);
+  border: 1px solid rgba(255, 107, 30, 0.2);
   border-radius: 5px;
   padding: 2px 7px;
   font-size: 13.5px;
   color: var(--theme-color1, #ff6b1e);
-  font-family: monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .bd-content pre code {
   background: transparent;
   border: none;
   padding: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
+/* ── Images ── */
 .bd-content img {
-  width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: 14px;
-  margin: 1.5em 0;
+  margin: 2em auto;
   display: block;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
 }
 
-.bd-content table {
+.bd-content img:hover {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Embedded Image Alignment Classes (from RichTextEditor) ── */
+.bd-content .rte-embedded-image {
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.bd-content .rte-img-center {
+  display: block;
+  margin: 2em auto;
+  max-width: 100%;
+}
+
+.bd-content .rte-img-left {
+  float: left;
+  margin: 0.5em 2em 1.5em 0;
+  max-width: 48%;
+}
+
+.bd-content .rte-img-right {
+  float: right;
+  margin: 0.5em 0 1.5em 2em;
+  max-width: 48%;
+}
+
+/* ── CALLOUT BOX (Exact match with RichTextEditor) ── */
+.bd-content .rte-callout {
+  margin: 2em 0;
+  padding: 20px 24px;
+  border-left: 4px solid #d97706;
+  background: rgba(245, 158, 11, 0.08);
+  border-radius: 0 14px 14px 0;
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.bd-content .rte-callout-header {
+  color: #f59e0b;
+  font-size: 15.5px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bd-content .rte-callout p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── TABLES (Exact match with RichTextEditor + Responsive Scroll) ── */
+.bd-content table,
+.bd-content .rte-table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 1.5em 0;
-  font-size: 14px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 2em 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   overflow-x: auto;
   display: block;
+  background: #131313;
+  -webkit-overflow-scrolling: touch;
 }
 
-.bd-content th {
-  background: rgba(255, 107, 30, 0.1);
-  color: var(--headings-color, #fff);
+.bd-content table thead,
+.bd-content table tbody,
+.bd-content .rte-table thead,
+.bd-content .rte-table tbody {
+  min-width: 520px;
+}
+
+.bd-content th,
+.bd-content .rte-table th {
+  background: #1c1c1c;
+  color: #ffffff;
+  padding: 14px 18px;
   font-weight: 700;
-  padding: 10px 14px;
+  font-size: 13.5px;
   text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-.bd-content td {
-  padding: 10px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.65);
+.bd-content td,
+.bd-content .rte-table td {
+  padding: 14px 18px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.78);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.bd-content tr:hover td {
-  background: rgba(255, 255, 255, 0.025);
+.bd-content tr:last-child td,
+.bd-content .rte-table tr:last-child td {
+  border-bottom: none;
 }
 
+.bd-content tr:hover td,
+.bd-content .rte-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Status Badges in Tables */
+.bd-content .rte-badge-green {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 100px;
+  color: #34d399;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.bd-content .rte-badge-orange {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(255, 107, 30, 0.15);
+  border: 1px solid rgba(255, 107, 30, 0.35);
+  border-radius: 100px;
+  color: #ff9b57;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── Divider ── */
 .bd-content hr {
   border: none;
   height: 1px;
-  background: linear-gradient(90deg, var(--theme-color1, #ff6b1e), transparent);
-  margin: 2em 0;
+  background: linear-gradient(90deg, var(--theme-color1, #ff6b1e), rgba(255, 107, 30, 0.2), transparent);
+  margin: 2.5em 0;
+}
+
+/* ── Video / Iframe Embeds ── */
+.bd-content iframe,
+.bd-content video {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 1.8em 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ── Footer row — tags + share ── */
@@ -1025,11 +1173,9 @@
   0%,
   100% {
     opacity: 0.7;
-    transform: scale(1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.1);
   }
 }
 
@@ -1326,6 +1472,26 @@
   }
   .bd-content {
     font-size: 15px;
+  }
+  /* Responsive Article Content Overrides */
+  .bd-content .rte-img-left,
+  .bd-content .rte-img-right {
+    float: none !important;
+    margin: 1.5em auto !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+  .bd-content table,
+  .bd-content .rte-table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 1.5em 0 !important;
+  }
+  .bd-content .rte-callout {
+    padding: 16px 18px !important;
+    margin: 1.5em 0 !important;
   }
 }
 

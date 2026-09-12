@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./EditBlog.css";
 import { getBlogById, updateBlog } from "../services/blogService";
+import RichTextEditor from "../components/RichTextEditor/RichTextEditor";
 
 /* ── SVG Icons ── */
 const IconGlobe = () => (
@@ -112,32 +113,32 @@ const IconPlus = () => (
   </svg>
 );
 const IconArrow = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="5" y1="12" x2="19" y2="12" />
     <polyline points="12,5 19,12 12,19" />
   </svg>
 );
 const IconSpinner = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    className="eb-spin"
-  >
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="eb-spin">
     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+  </svg>
+);
+const IconSave = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </svg>
+);
+const IconChevronLeft = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+const IconSend = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13" />
+    <polygon points="22 2 15 22 11 13 2 9 22 2" />
   </svg>
 );
 
@@ -202,11 +203,13 @@ const EditBlog = () => {
 
   /* ── Tags ── */
   const [tagInput, setTagInput] = useState("");
+  const tagInputRef = useRef(null);
 
   /* ── Category ── */
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [showCustomCat, setShowCustomCat] = useState(false);
   const [customCatInput, setCustomCatInput] = useState("");
+  const [catDropdownOpen, setCatDropdownOpen] = useState(false);
 
   /* ── UI ── */
   const [fetchLoading, setFetchLoading] = useState(true);
@@ -419,8 +422,18 @@ const EditBlog = () => {
       setSuccessMsg("Blog updated successfully!");
       setTimeout(() => navigate("/admin/blogs"), 1200);
     } catch (err) {
-      console.error(err);
-      setErrors({ submit: "Failed to update blog. Please try again." });
+      console.error("Update blog error:", err);
+      const serverMsg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Failed to update blog. Please try again.";
+
+      if (serverMsg.toLowerCase().includes("slug")) {
+        setErrors({ slug: serverMsg, submit: serverMsg });
+      } else {
+        setErrors({ submit: serverMsg });
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setLoading(false);
     }
@@ -494,21 +507,6 @@ const EditBlog = () => {
           <Link to="/admin/blogs" className="eb-btn-cancel">
             Cancel
           </Link>
-          <button
-            className="eb-btn-publish"
-            onClick={() => handleSubmit("published")}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <IconSpinner /> Updating...
-              </>
-            ) : (
-              <>
-                Update & Publish <IconArrow />
-              </>
-            )}
-          </button>
         </div>
       </div>
 
@@ -569,25 +567,21 @@ const EditBlog = () => {
           </div>
 
           {/* Content */}
-          <div className="eb-card">
-            <div className="eb-field">
-              <label className="eb-label" htmlFor="eb-content">
-                Content <span className="eb-req">*</span>
-              </label>
-              <textarea
-                id="eb-content"
-                name="content"
-                className={`eb-textarea${errors.content ? " eb-input--error" : ""}`}
-                placeholder="Write your article..."
-                value={form.content}
-                onChange={handleChange}
-                rows={16}
-              />
-              {errors.content && (
-                <span className="eb-field-error">{errors.content}</span>
-              )}
-              <p className="eb-field-hint">{form.content.length} characters</p>
-            </div>
+          <div className="eb-card eb-card--editor">
+            <RichTextEditor
+              label="Article Content"
+              value={form.content}
+              onChange={(html) => {
+                setForm((p) => ({ ...p, content: html }));
+                if (errors.content) setErrors((p) => ({ ...p, content: "" }));
+              }}
+              error={errors.content}
+            />
+            {errors.content && (
+              <span className="eb-field-error" style={{ marginTop: 8, display: "block" }}>
+                {errors.content}
+              </span>
+            )}
           </div>
 
           {/* SEO */}
@@ -639,28 +633,36 @@ const EditBlog = () => {
           <div className="eb-card">
             <div className="eb-card-head">
               <IconGlobe />
-              <h3 className="eb-card-title">Publish</h3>
+              <h3 className="eb-card-title">Publish Settings</h3>
             </div>
 
+            {/* Status pill toggle — no native OS dropdown */}
             <div className="eb-field">
-              <label className="eb-label" htmlFor="eb-status">
-                Status
-              </label>
-              <select
-                id="eb-status"
-                name="status"
-                className="eb-select"
-                value={form.status}
-                onChange={handleChange}
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
+              <label className="eb-label">Status</label>
+              <div className="eb-status-group">
+                <button
+                  type="button"
+                  className={`eb-status-pill ${form.status === 'draft' ? 'eb-status-pill--active-draft' : ''}`}
+                  onClick={() => setForm(p => ({ ...p, status: 'draft' }))}
+                >
+                  <span className="eb-status-dot eb-status-dot--draft" />
+                  Draft
+                </button>
+                <button
+                  type="button"
+                  className={`eb-status-pill ${form.status === 'published' ? 'eb-status-pill--active-pub' : ''}`}
+                  onClick={() => setForm(p => ({ ...p, status: 'published' }))}
+                >
+                  <span className="eb-status-dot eb-status-dot--pub" />
+                  Published
+                </button>
+              </div>
             </div>
 
             <div className="eb-field">
               <label className="eb-label" htmlFor="eb-publishDate">
                 Publish Date
+                <span className="eb-field-hint" style={{margin:0}}>Optional</span>
               </label>
               <input
                 id="eb-publishDate"
@@ -671,14 +673,6 @@ const EditBlog = () => {
                 onChange={handleChange}
               />
             </div>
-
-            <button
-              className="eb-btn-draft"
-              onClick={() => handleSubmit("draft")}
-              disabled={loading}
-            >
-              {loading ? "Saving..." : "Save as Draft"}
-            </button>
           </div>
 
           {/* Organization */}
@@ -688,33 +682,54 @@ const EditBlog = () => {
               <h3 className="eb-card-title">Organization</h3>
             </div>
 
+            {/* Category — Custom Dropdown */}
             <div className="eb-field">
-              <label className="eb-label" htmlFor="eb-category">
-                Category
-              </label>
-              <select
-                id="eb-category"
-                name="category"
-                className={`eb-select${errors.category ? " eb-input--error" : ""}`}
-                value={form.category}
-                onChange={handleChange}
+              <label className="eb-label">Category</label>
+
+              <div
+                className={`eb-custom-select${errors.category ? ' eb-input--error' : ''}${catDropdownOpen ? ' eb-custom-select--open' : ''}`}
+                onClick={() => setCatDropdownOpen(o => !o)}
+                tabIndex={0}
+                onBlur={() => setTimeout(() => setCatDropdownOpen(false), 150)}
               >
-                {categories.map((cat, i) => (
-                  <option key={i} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+                <span className="eb-custom-select-value">{form.category || 'Select category...'}</span>
+                <span className="eb-custom-select-arrow">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </span>
+
+                {catDropdownOpen && (
+                  <div className="eb-custom-select-menu">
+                    {categories.map((cat, i) => (
+                      <div
+                        key={i}
+                        className={`eb-custom-select-option${form.category === cat ? ' eb-custom-select-option--active' : ''}`}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setForm(p => ({ ...p, category: cat }));
+                          setErrors(p => ({ ...p, category: '' }));
+                          setCatDropdownOpen(false);
+                        }}
+                      >
+                        {form.category === cat && (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                        {cat}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {errors.category && (
                 <span className="eb-field-error">{errors.category}</span>
               )}
 
               {!showCustomCat ? (
-                <button
-                  className="eb-btn-add-cat"
-                  onClick={() => setShowCustomCat(true)}
-                  type="button"
-                >
+                <button className="eb-btn-add-cat" onClick={() => setShowCustomCat(true)} type="button">
                   <IconPlus /> Add custom category
                 </button>
               ) : (
@@ -725,44 +740,38 @@ const EditBlog = () => {
                     placeholder="New category name..."
                     value={customCatInput}
                     onChange={(e) => setCustomCatInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && addCustomCategory()}
+                    onKeyDown={(e) => e.key === 'Enter' && addCustomCategory()}
                     autoFocus
                   />
                   <div className="eb-custom-cat-actions">
-                    <button
-                      className="eb-btn-cat-add"
-                      onClick={addCustomCategory}
-                      type="button"
-                    >
-                      Add
-                    </button>
-                    <button
-                      className="eb-btn-cat-cancel"
-                      onClick={() => {
-                        setShowCustomCat(false);
-                        setCustomCatInput("");
-                      }}
-                      type="button"
-                    >
-                      Cancel
-                    </button>
+                    <button className="eb-btn-cat-add" onClick={addCustomCategory} type="button">Add</button>
+                    <button className="eb-btn-cat-cancel" onClick={() => { setShowCustomCat(false); setCustomCatInput(''); }} type="button">Cancel</button>
                   </div>
                 </div>
               )}
             </div>
 
+            {/* Tags */}
             <div className="eb-field">
               <label className="eb-label">
-                Tags{" "}
-                <span className="eb-char-count">{form.tags.length}/10</span>
+                Tags
+                <span className="eb-tags-counter">
+                  <span className={form.tags.length >= 10 ? 'eb-tags-counter--full' : ''}>
+                    {form.tags.length}
+                  </span>
+                  /10
+                </span>
               </label>
-              <div className="eb-tags-wrap">
+              <div
+                className="eb-tags-wrap"
+                onClick={() => tagInputRef.current?.focus()}
+              >
                 {form.tags.map((tag, i) => (
                   <span className="eb-tag" key={i}>
                     {tag}
                     <button
                       className="eb-tag-remove"
-                      onClick={() => removeTag(tag)}
+                      onClick={(e) => { e.stopPropagation(); removeTag(tag); }}
                       type="button"
                       aria-label={`Remove ${tag}`}
                     >
@@ -770,20 +779,24 @@ const EditBlog = () => {
                     </button>
                   </span>
                 ))}
-                <input
-                  className="eb-tags-input"
-                  placeholder={
-                    form.tags.length < 10
-                      ? "Add tag, press Enter..."
-                      : "Max reached"
-                  }
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                  disabled={form.tags.length >= 10}
-                />
+                {form.tags.length < 10 ? (
+                  <input
+                    ref={tagInputRef}
+                    className="eb-tags-input"
+                    placeholder={form.tags.length === 0 ? 'Type a tag & press Enter...' : 'Add another tag...'}
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                  />
+                ) : (
+                  <span className="eb-tags-max-msg">Max tags reached</span>
+                )}
               </div>
-              <p className="eb-field-hint">Press Enter or comma to add tags.</p>
+              <p className="eb-field-hint">
+                {form.tags.length < 10
+                  ? `Press Enter or comma to add. ${10 - form.tags.length} slot${10 - form.tags.length !== 1 ? 's' : ''} remaining.`
+                  : '✓ All 10 tag slots filled.'}
+              </p>
             </div>
           </div>
 
@@ -869,30 +882,35 @@ const EditBlog = () => {
 
       {/* Bottom bar */}
       <div className="eb-bottom-bar">
-        <Link to="/admin/blogs" className="eb-btn-cancel">
-          Cancel
+        <Link to="/admin/blogs" className="eb-btn-back">
+          <IconChevronLeft />
+          <span>Blogs</span>
         </Link>
-        <div style={{ display: "flex", gap: "10px" }}>
+
+        <div className="eb-bottom-actions">
           <button
-            className="eb-btn-draft"
+            className="eb-btn-draft-bottom"
             onClick={() => handleSubmit("draft")}
             disabled={loading}
+            title="Save as draft — not visible to public"
           >
-            {loading ? "Saving..." : "Save as Draft"}
+            {loading ? (
+              <><span className="eb-saving-dot" />Saving...</>
+            ) : (
+              <><IconSave />Save Draft</>
+            )}
           </button>
+
           <button
             className="eb-btn-publish"
             onClick={() => handleSubmit("published")}
             disabled={loading}
+            title="Update & publish — make visible to public"
           >
             {loading ? (
-              <>
-                <IconSpinner /> Updating...
-              </>
+              <><IconSpinner />Updating...</>
             ) : (
-              <>
-                Update & Publish <IconArrow />
-              </>
+              <><IconSend />Update & Publish</>
             )}
           </button>
         </div>

@@ -1,1 +1,0 @@
-System.register(["./vendor-legacy-CKK3xVZZ.js"],function(e,t){var n;return{setters:[function(e){n=e.E}],execute:function(){e("DotLottieReact",n)}}});
