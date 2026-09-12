@@ -10,7 +10,7 @@ const projectsData = [
     preview: "#",
     caseStudy: "/portfolio",
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784811717/WhatsApp_Image_2026-07-23_at_4.40.46_PM_jhekrw.jpg",
+      "/Cloudinary-images/WhatsApp_Image_2026-07-23_at_4.40.46_PM_jhekrw.jpg",
     ],
   },
 
@@ -21,7 +21,7 @@ const projectsData = [
     preview: "#",
     caseStudy: "/portfolio",
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784811717/WhatsApp_Image_2026-07-23_at_4.40.50_PM_obqsar.jpg",
+      "/Cloudinary-images/WhatsApp_Image_2026-07-23_at_4.40.50_PM_obqsar.jpg",
     ],
   },
 
@@ -32,7 +32,7 @@ const projectsData = [
     preview: "#",
     caseStudy: "/portfolio",
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784811717/WhatsApp_Image_2026-07-23_at_4.40.42_PM_nqbjyi.jpg",
+      "/Cloudinary-images/WhatsApp_Image_2026-07-23_at_4.40.42_PM_nqbjyi.jpg",
     ],
   },
 
@@ -43,7 +43,7 @@ const projectsData = [
     preview: "#",
     caseStudy: "/portfolio",
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784811717/WhatsApp_Image_2026-07-23_at_4.40.48_PM_ffaayw.jpg",
+      "/Cloudinary-images/WhatsApp_Image_2026-07-23_at_4.40.48_PM_ffaayw.jpg",
     ],
   },
 
@@ -54,7 +54,7 @@ const projectsData = [
     preview: "#",
     caseStudy: "/portfolio",
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784811718/WhatsApp_Image_2026-07-23_at_4.40.44_PM_togst5.jpg",
+      "/Cloudinary-images/WhatsApp_Image_2026-07-23_at_4.40.44_PM_togst5.jpg",
     ],
   },
 ];

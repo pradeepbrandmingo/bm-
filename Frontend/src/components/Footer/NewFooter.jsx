@@ -640,7 +640,7 @@ const NewFooter = () => {
                 <div className="f-partner-badge">
                   <div className="f-partner-icon">
                     <img
-                      src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776765825/partner1_stzwuz.svg"
+                      src="/Cloudinary-images/partner1_stzwuz.svg"
                       alt="Shopify Partners"
                     />
                   </div>
@@ -649,7 +649,7 @@ const NewFooter = () => {
                 <div className="f-partner-badge">
                   <div className="f-partner-icon">
                     <img
-                      src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776765825/partner2_lps5nu.svg"
+                      src="/Cloudinary-images/partner2_lps5nu.svg"
                       alt="Meta Business Partners"
                     />
                   </div>
@@ -658,7 +658,7 @@ const NewFooter = () => {
                 <div className="f-partner-badge">
                   <div className="f-partner-icon">
                     <img
-                      src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776765825/partner3_jgutpi.svg"
+                      src="/Cloudinary-images/partner3_jgutpi.svg"
                       alt="Google Partner"
                     />
                   </div>

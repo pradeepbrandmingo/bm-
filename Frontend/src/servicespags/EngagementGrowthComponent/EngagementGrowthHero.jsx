@@ -368,7 +368,7 @@ const EngagementGrowthHero = () => {
             <div className="rdh-badges">
               <div className="rdh-badge">
                 <img
-                  src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776684180/f-500_icvdap.svg"
+                  src="/Cloudinary-images/f-500_icvdap.svg"
                   className="rdh-badge-logo"
                   alt="Fortune 500"
                 />
@@ -379,7 +379,7 @@ const EngagementGrowthHero = () => {
               </div>
               <div className="rdh-badge">
                 <img
-                  src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776684179/ica_hx4ujj.svg"
+                  src="/Cloudinary-images/ica_hx4ujj.svg"
                   className="rdh-badge-logo"
                   alt="ICA"
                 />
@@ -390,7 +390,7 @@ const EngagementGrowthHero = () => {
               </div>
               <div className="rdh-badge">
                 <img
-                  src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1776684179/topp-dev_l9jcyb.png"
+                  src="/Cloudinary-images/topp-dev_l9jcyb.png"
                   className="rdh-badge-logo"
                   alt="Top Devs"
                 />

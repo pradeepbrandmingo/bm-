@@ -2,18 +2,18 @@ import React, { useState } from "react";
 
 const serviceImages = {
   enterprise:
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
+    "/Cloudinary-images/Untitled_design_3_g04kyv.png",
   legacy:
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
-  pwa: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
-  api: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
+    "/Cloudinary-images/Untitled_design_3_g04kyv.png",
+  pwa: "/Cloudinary-images/Untitled_design_3_g04kyv.png",
+  api: "/Cloudinary-images/Untitled_design_3_g04kyv.png",
   ecommerce:
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
-  spa: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
+    "/Cloudinary-images/Untitled_design_3_g04kyv.png",
+  spa: "/Cloudinary-images/Untitled_design_3_g04kyv.png",
   migration:
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
+    "/Cloudinary-images/Untitled_design_3_g04kyv.png",
   payment:
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1784814665/Untitled_design_3_g04kyv.png",
+    "/Cloudinary-images/Untitled_design_3_g04kyv.png",
 };
 
 const servicesData = [

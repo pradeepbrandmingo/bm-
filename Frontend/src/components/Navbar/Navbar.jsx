@@ -388,7 +388,7 @@ export default function Navbar({ openPopup }) {
               <div className="logo">
                 <Link to="/" onClick={closeMobileMenu}>
                   <img
-                    src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1774440484/Group-19-2-1024x199_pnnsp8.png"
+                    src="/Cloudinary-images/Group-19-2-1024x199_pnnsp8.png"
                     alt="Logo"
                   />
                 </Link>
@@ -604,7 +604,7 @@ export default function Navbar({ openPopup }) {
               <div className="nav-logo">
                 <Link to="/" onClick={closeMobileMenu}>
                   <img
-                    src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1774440484/Group-19-2-1024x199_pnnsp8.png"
+                    src="/Cloudinary-images/Group-19-2-1024x199_pnnsp8.png"
                     alt="Logo"
                   />
                 </Link>

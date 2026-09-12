@@ -10,7 +10,7 @@ const TEAM_AVATARS = [
 ];
 
 const TEAM_IMAGE =
-  "https://res.cloudinary.com/dpdn7kzll/image/upload/v1783064312/Untitled_design_duod8h.png";
+  "/Cloudinary-images/Untitled_design_duod8h.png";
 
 const AboutTeam = ({ openPopup }) => {
   const sectionRef = useRef(null);

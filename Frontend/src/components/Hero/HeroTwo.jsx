@@ -19,23 +19,23 @@ const MotionLink = motion(Link);
 ───────────────────────────────────────── */
 const CLIENT_LOGOS = [
   {
-    url: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995439/9_lrlxdl.png",
+    url: "/Cloudinary-images/9_lrlxdl.png",
     alt: "Client 1",
   },
   {
-    url: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995478/19_kxrlwu.png",
+    url: "/Cloudinary-images/19_kxrlwu.png",
     alt: "Client 2",
   },
   {
-    url: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995424/4_ky3yra.png",
+    url: "/Cloudinary-images/4_ky3yra.png",
     alt: "Client 3",
   },
   {
-    url: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995447/13_kwadt5.png",
+    url: "/Cloudinary-images/13_kwadt5.png",
     alt: "Client 4",
   },
   {
-    url: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995422/2_etbkdt.png",
+    url: "/Cloudinary-images/2_etbkdt.png",
     alt: "Client 5",
   },
 ];

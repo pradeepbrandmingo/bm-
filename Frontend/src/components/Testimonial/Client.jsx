@@ -210,78 +210,78 @@ import "./Client.css";
 const LEFT_CLIENTS = [
   {
     name: "Boyomo",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995422/2_etbkdt.png",
+    logo: "/Cloudinary-images/2_etbkdt.png",
   },
   {
     name: "mypharmacy",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995422/3_t2phh0.png",
+    logo: "/Cloudinary-images/3_t2phh0.png",
   },
   {
     name: "James Wilson",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995423/5_bl4cnw.png",
+    logo: "/Cloudinary-images/5_bl4cnw.png",
   },
   {
     name: "Priya Kapoor",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995424/4_ky3yra.png",
+    logo: "/Cloudinary-images/4_ky3yra.png",
   },
   {
     name: "Lucas Ferreira",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995433/6_kruuee.png",
+    logo: "/Cloudinary-images/6_kruuee.png",
   },
   {
     name: "Lucas Ferreira",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995436/7_drcmxj.png",
+    logo: "/Cloudinary-images/7_drcmxj.png",
   },
   {
     name: "Lucas Ferreira",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995438/8_enp8qa.png",
+    logo: "/Cloudinary-images/8_enp8qa.png",
   },
   {
     name: "Lucas Ferreira",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995439/9_lrlxdl.png",
+    logo: "/Cloudinary-images/9_lrlxdl.png",
   },
 ];
 
 const RIGHT_CLIENTS = [
   {
     name: "Riya Bose",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995444/11_epm0ux.png",
+    logo: "/Cloudinary-images/11_epm0ux.png",
   },
   {
     name: "Leo Santos",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995445/12_hulsp3.png",
+    logo: "/Cloudinary-images/12_hulsp3.png",
   },
   {
     name: "Tanvi Shah",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995447/13_kwadt5.png",
+    logo: "/Cloudinary-images/13_kwadt5.png",
   },
   {
     name: "Arjun Das",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995459/14_ekrye0.png",
+    logo: "/Cloudinary-images/14_ekrye0.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995462/15_aui2yn.png",
+    logo: "/Cloudinary-images/15_aui2yn.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995463/16_txmyfy.png",
+    logo: "/Cloudinary-images/16_txmyfy.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995465/17_kwjqbg.png",
+    logo: "/Cloudinary-images/17_kwjqbg.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995472/18_b9yz0l.png",
+    logo: "/Cloudinary-images/18_b9yz0l.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995478/19_kxrlwu.png",
+    logo: "/Cloudinary-images/19_kxrlwu.png",
   },
   {
     name: "David Park",
-    logo: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782995482/20_bdiwth.png",
+    logo: "/Cloudinary-images/20_bdiwth.png",
   },
 ];
 

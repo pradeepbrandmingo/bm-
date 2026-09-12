@@ -32,11 +32,11 @@ const BrandSection = () => {
   }, []);
 
   const brands = [
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1778851749/3_j0cc7o.png",
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1778851749/5_x20zrw.png",
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1778851749/4_dvfo9r.png",
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1778851749/2_xng6vk.png",
-    "https://res.cloudinary.com/dpdn7kzll/image/upload/v1778851874/Untitled_design_1_hxmxur.png",
+    "/Cloudinary-images/3_j0cc7o.png",
+    "/Cloudinary-images/5_x20zrw.png",
+    "/Cloudinary-images/4_dvfo9r.png",
+    "/Cloudinary-images/2_xng6vk.png",
+    "/Cloudinary-images/Untitled_design_1_hxmxur.png",
   ];
 
   return (

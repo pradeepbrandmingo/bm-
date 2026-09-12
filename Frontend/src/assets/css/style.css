@@ -10251,7 +10251,7 @@ body {
       rgba(13, 13, 13, 0.92) 30%,
       rgba(13, 13, 13, 0.45) 100%
     ),
-    url("https://res.cloudinary.com/dpdn7kzll/image/upload/v1776691450/cta-react_skmjab.webp");
+    url("/Cloudinary-images/cta-react_skmjab.webp");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -10320,7 +10320,7 @@ body {
         rgba(13, 13, 13, 0.65) 50%,
         rgba(13, 13, 13, 0.3) 100%
       ),
-      url("https://res.cloudinary.com/dpdn7kzll/image/upload/v1776691450/cta-react_skmjab.webp");
+      url("/Cloudinary-images/cta-react_skmjab.webp");
     background-position: right center; /* ← right side image show hogi */
     background-size: cover;
     padding: 60px 0;

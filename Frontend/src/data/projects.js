@@ -5,7 +5,7 @@ const projects = [
   {
     type: "Shopify",
 
-    img: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782976916/aureialondon_2_xfxech.png",
+    img: "/Cloudinary-images/aureialondon_2_xfxech.png",
     title: "Aureia London Store",
     category: "Luxury Fashion",
 
@@ -16,11 +16,11 @@ const projects = [
     caseStudy: "/portfolio",
 
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782977243/aureialondon_3_xmb83m.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782977573/aureialondon_4_y70tfo.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782977646/aureialondon_5_krdok4.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782978425/aureialondon_6_aclk4t.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782978536/aureialondon_7_sgwlal.png",
+      "/Cloudinary-images/aureialondon_3_xmb83m.png",
+      "/Cloudinary-images/aureialondon_4_y70tfo.png",
+      "/Cloudinary-images/aureialondon_5_krdok4.png",
+      "/Cloudinary-images/aureialondon_6_aclk4t.png",
+      "/Cloudinary-images/aureialondon_7_sgwlal.png",
     ],
 
     impact: {
@@ -71,7 +71,7 @@ const projects = [
   {
     type: "Full Stack",
 
-    img: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782979271/marque_pizvvx.png",
+    img: "/Cloudinary-images/marque_pizvvx.png",
     title: "MERN Education Platform",
     category: "Education Technology",
 
@@ -82,11 +82,11 @@ const projects = [
     caseStudy: "/portfolio",
 
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782979271/marque_2_vvfwwy.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782979414/marque3_xsr5oe.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782980105/ChatGPT_Image_Jul_2_2026_01_43_15_PM_khvdbi.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782980652/ChatGPT_Image_Jul_2_2026_01_53_06_PM_kcdtdf.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782980803/marque4_qa88gi.png",
+      "/Cloudinary-images/marque_2_vvfwwy.png",
+      "/Cloudinary-images/marque3_xsr5oe.png",
+      "/Cloudinary-images/ChatGPT_Image_Jul_2_2026_01_43_15_PM_khvdbi.png",
+      "/Cloudinary-images/ChatGPT_Image_Jul_2_2026_01_53_06_PM_kcdtdf.png",
+      "/Cloudinary-images/marque4_qa88gi.png",
     ],
 
     impact: {
@@ -288,7 +288,7 @@ const projects = [
   {
     type: "Shopify",
 
-    img: "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782988067/Untitled_design_1_gtt8le.png",
+    img: "/Cloudinary-images/Untitled_design_1_gtt8le.png",
     title: "Tweedle Shopify Store",
     category: "Fashion E-Commerce",
 
@@ -299,11 +299,11 @@ const projects = [
     caseStudy: "/portfolio",
 
     images: [
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782981008/tweedle_2_z1mhob.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782982622/tweedle3_wpuoru.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782982995/tweedle5_pasxrl.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782982629/tweedle4_xzadah.png",
-      "https://res.cloudinary.com/dpdn7kzll/image/upload/v1782980906/tweedle_bssec1.png",
+      "/Cloudinary-images/tweedle_2_z1mhob.png",
+      "/Cloudinary-images/tweedle3_wpuoru.png",
+      "/Cloudinary-images/tweedle5_pasxrl.png",
+      "/Cloudinary-images/tweedle4_xzadah.png",
+      "/Cloudinary-images/tweedle_bssec1.png",
     ],
 
     impact: {

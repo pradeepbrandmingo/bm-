@@ -155,7 +155,7 @@ export default function Login() {
         <div className="lg-logo-wrapper">
           <Link to="/" className="lg-logo-link" title="Brandmingo Home">
             <img
-              src="https://res.cloudinary.com/dpdn7kzll/image/upload/v1774440484/Group-19-2-1024x199_pnnsp8.png"
+              src="/Cloudinary-images/Group-19-2-1024x199_pnnsp8.png"
               alt="Brandmingo"
               className="lg-brand-logo"
             />
